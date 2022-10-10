@@ -7,11 +7,9 @@ import { useState } from "react";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const [name, setName] = useState("test nft");
-  const [description, setDescription] = useState("some description");
-  const [image, setImage] = useState(
-    "https://avatars.githubusercontent.com/u/76690419?v=4"
-  );
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
   const [mintedAddress, setMintedAddress] = useState("");
 
