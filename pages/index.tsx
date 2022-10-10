@@ -43,25 +43,29 @@ const Home: NextPage = () => {
         <img src="/sol.png" className={styles.icon} />
       </div>
       <h1 className={styles.h1}>NFT Gated Website on Solana</h1>
-      <input
-        className={styles.input}
-        placeholder="Enter name for your NFT"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        className={styles.input}
-        placeholder="Enter description for your NFT"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      {!mintedAddress && (
+        <>
+          <input
+            className={styles.input}
+            placeholder="Enter name for your NFT"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            className={styles.input}
+            placeholder="Enter description for your NFT"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-      <input
-        className={styles.input}
-        placeholder="Enter image for your NFT"
-        value={image}
-        onChange={(e) => setImage(e.target.value)}
-      />
+          <input
+            className={styles.input}
+            placeholder="Enter image for your NFT"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          />
+        </>
+      )}
 
       <WalletMultiButton />
       {publicKey && !user && (
@@ -69,11 +73,11 @@ const Home: NextPage = () => {
           Login
         </button>
       )}
-      {user && (
+      {user && !mintedAddress && (
         <>
           {loading ? (
             <button className={styles.button} disabled>
-              Minting NFT
+              Minting NFT...
             </button>
           ) : (
             <button className={styles.button} onClick={mintNFT}>
@@ -82,6 +86,7 @@ const Home: NextPage = () => {
           )}
         </>
       )}
+
       {mintedAddress && (
         <a
           href={`https://explorer.solana.com/address/${mintedAddress}?cluster=devnet`}
