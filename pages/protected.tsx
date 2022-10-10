@@ -1,32 +1,38 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useProgram } from "@thirdweb-dev/react/solana";
-import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useLogin, useUser } from "@thirdweb-dev/react/solana";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk/solana";
+import type { GetServerSideProps } from "next";
+import { FC } from "react";
+import { getUser } from "../auth.config";
 
-const Protected: NextPage = () => {
-  const [hasAccess, setHasAccess] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const { data: program } = useProgram(
-    "EM4cqegRFnZbxeHJNxefWzG1vkpPuzjofaHD3UDzq46v",
-    "nft-collection"
-  );
+const programAddress = "Hdk7H3FBM1GkENKEhvYGvxo2b8NJc1wCywDsjbhDFyCW";
+
+interface IProtectedProps {
+  hasAccess: boolean;
+}
+
+const Protected: FC<IProtectedProps> = ({ hasAccess }) => {
   const { publicKey } = useWallet();
+  const { user } = useUser();
+  const login = useLogin();
 
-  useEffect(() => {
-    const getBalance = async () => {
-      setLoading(true);
-      const nfts = await program?.getAllNFTAddresses();
-      const balance = await program?.balance(nfts ? nfts[0] : "0");
-      if (balance && balance > 0) {
-        setHasAccess(true);
-      }
-      setLoading(false);
-    };
-    getBalance();
-  }, [program, publicKey]);
+  if (!publicKey) {
+    return (
+      <div>
+        <h1>Protected Page</h1>
+        <WalletMultiButton />
+      </div>
+    );
+  }
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!user) {
+    return (
+      <div>
+        <h1>Protected Page</h1>
+        <button onClick={() => login()}>Login</button>
+      </div>
+    );
   }
 
   return (
@@ -47,3 +53,34 @@ const Protected: NextPage = () => {
 };
 
 export default Protected;
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const sdk = ThirdwebSDK.fromNetwork("devnet");
+
+  const user = await getUser(req);
+
+  if (!user) {
+    return {
+      props: {
+        hasAccess: false,
+      },
+    };
+  }
+
+  const program = await sdk.getNFTCollection(programAddress);
+  const nfts = await program?.getAllNFTAddresses();
+  const balance = await program?.balanceOf(user?.address, nfts ? nfts[0] : "0");
+
+  if (balance && balance > 0) {
+    return {
+      props: {
+        hasAccess: true,
+      },
+    };
+  }
+  return {
+    props: {
+      hasAccess: false,
+    },
+  };
+};

@@ -3,9 +3,6 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-// Default styles that can be overridden by your app
-require("@solana/wallet-adapter-react-ui/styles.css");
-
 const Home: NextPage = () => {
   return (
     <>
@@ -30,9 +27,9 @@ const Home: NextPage = () => {
           .
         </p>
 
-        <a href="/protected" className={styles.lightPurple}>
-          Protected Page
-        </a>
+        <Link href="/protected" passHref>
+          <a className={styles.lightPurple}>Protected Page</a>
+        </Link>
 
         <WalletMultiButton />
       </div>
