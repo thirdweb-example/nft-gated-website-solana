@@ -25,10 +25,26 @@
   margin-bottom: 0px;
 }
 
-.explain {
-  font-size: 1.125rem;
+.input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 16px;
 }
 
 .lightPurple {
   color: #e011a7;
+}
+
+.button {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 16px;
+  background-color: #e011a7;
+  color: white;
 }

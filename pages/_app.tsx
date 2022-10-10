@@ -9,18 +9,18 @@ const network: Network = "devnet";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider
-      authConfig={{
-        authUrl: "/api/auth",
-        domain: "example.org",
-        loginRedirect: "/",
-      }}
-      network={network}
-    >
-      <WalletModalProvider>
+    <WalletModalProvider>
+      <ThirdwebProvider
+        authConfig={{
+          authUrl: "/api/auth",
+          domain: "example.org",
+          loginRedirect: "/",
+        }}
+        network={network}
+      >
         <Component {...pageProps} />
-      </WalletModalProvider>
-    </ThirdwebProvider>
+      </ThirdwebProvider>
+    </WalletModalProvider>
   );
 }
 
