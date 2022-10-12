@@ -1,107 +1,49 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useLogin, useUser } from "@thirdweb-dev/react/solana";
-import type { NextPage } from "next";
-import Link from "next/link";
-import { useState } from "react";
-import styles from "../styles/Home.module.css";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk/solana";
+import type { GetServerSideProps } from "next";
+import { getUser } from "../auth.config";
 
-const Home: NextPage = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [mintedAddress, setMintedAddress] = useState("");
-
-  const { publicKey } = useWallet();
-  const { user } = useUser();
-  const login = useLogin();
-
-  const mintNFT = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/mint-nft", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          description,
-          image,
-        }),
-      });
-      const data = await response.json();
-      setMintedAddress(data.address);
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
-
+const Protected = () => {
   return (
-    <div className={styles.container}>
-      <div className={styles.iconContainer}>
-        <img src="/thirdweb.svg" className={styles.icon} />
-        <img src="/sol.png" className={styles.icon} />
-      </div>
-      <h1 className={styles.h1}>NFT Gated Website on Solana</h1>
-      {!mintedAddress && (
-        <>
-          <input
-            className={styles.input}
-            placeholder="Enter name for your NFT"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            className={styles.input}
-            placeholder="Enter description for your NFT"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-
-          <input
-            className={styles.input}
-            placeholder="Enter image for your NFT"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-        </>
-      )}
-
-      <WalletMultiButton />
-      {publicKey && !user && (
-        <button className={styles.button} onClick={() => login()}>
-          Login
-        </button>
-      )}
-      {user && !mintedAddress && (
-        <>
-          {loading ? (
-            <button className={styles.button} disabled>
-              Minting NFT...
-            </button>
-          ) : (
-            <button className={styles.button} onClick={mintNFT}>
-              Mint NFT
-            </button>
-          )}
-        </>
-      )}
-
-      {mintedAddress && (
-        <a
-          href={`https://explorer.solana.com/address/${mintedAddress}?cluster=devnet`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button className={styles.button}>View NFT</button>
-        </a>
-      )}
-
-      <Link href="/protected" passHref>
-        <a className={styles.lightPurple}>Protected Page</a>
-      </Link>
+    <div>
+      <h1>Protected Page</h1>
+      <p>You have access to this page</p>
     </div>
   );
 };
 
-export default Home;
+export default Protected;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const sdk = ThirdwebSDK.fromNetwork("devnet");
+
+  const user = await getUser(req);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const program = await sdk.getNFTDrop(
+    "GZttphkwJbruZm59cwpCUwxLEek8FMzGEsDPS9ujQ2rN"
+  );
+  const nfts = await program?.getAllClaimed();
+
+  const hasNFT = nfts?.some((nft) => nft.owner === user.address);
+
+  if (!hasNFT) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
