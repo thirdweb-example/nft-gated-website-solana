@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   const login = useLogin();
   const programAddress = "GZttphkwJbruZm59cwpCUwxLEek8FMzGEsDPS9ujQ2rN";
   const program = useProgram(programAddress, "nft-drop");
-  const claim = useClaimNFT(program.data);
+  const { mutate, isLoading } = useClaimNFT(program.data);
 
   return (
     <div className={styles.container}>
@@ -28,8 +28,14 @@ const Home: NextPage = () => {
         </button>
       )}
       {user && (
-        <button onClick={() => claim.mutate(1)}>
-          {claim.isLoading ? "Claiming..." : "Claim NFT"}
+        <button
+          onClick={() =>
+            mutate({
+              amount: 1,
+            })
+          }
+        >
+          {isLoading ? "Claiming..." : "Claim NFT"}
         </button>
       )}
 
