@@ -29,9 +29,10 @@
   width: 100%;
   max-width: 400px;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   margin: 16px;
   background-color: #e011a7;
   color: white;
+  cursor: pointer;
 }

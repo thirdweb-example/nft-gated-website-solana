@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       authConfig={{
         authUrl: "/api/auth",
         domain: "example.org",
-        loginRedirect: "/login",
+        loginRedirect: "/",
       }}
       network={network}
     >

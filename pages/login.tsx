@@ -21,12 +21,15 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>NFT Gated Website on Solana</h1>
-      <WalletMultiButton />
+      {!publicKey && <WalletMultiButton />}
       {publicKey && !user && (
         <button className={styles.button} onClick={() => login()}>
           Login
         </button>
       )}
+
+      {user && <p>Logged in as {user.address} </p>}
+
       {user && (
         <button
           onClick={() =>
@@ -34,6 +37,7 @@ const Home: NextPage = () => {
               amount: 1,
             })
           }
+          className={styles.button}
         >
           {isLoading ? "Claiming..." : "Claim NFT"}
         </button>
