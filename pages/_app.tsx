@@ -2,6 +2,7 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { ThirdwebProvider } from "@thirdweb-dev/react/solana";
 import { Network } from "@thirdweb-dev/sdk/solana";
 import type { AppProps } from "next/app";
+import { domainName } from "../const/yourDetails";
 import "../styles/globals.css";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
@@ -12,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThirdwebProvider
       authConfig={{
         authUrl: "/api/auth",
-        domain: "example.org",
+        domain: domainName,
         loginRedirect: "/",
       }}
       network={network}

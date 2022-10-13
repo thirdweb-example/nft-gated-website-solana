@@ -1,6 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk/solana";
 import type { GetServerSideProps } from "next";
 import { getUser } from "../auth.config";
+import { programAddress } from "../const/yourDetails";
 
 const Protected = () => {
   return (
@@ -27,9 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
   }
 
-  const program = await sdk.getNFTDrop(
-    "GZttphkwJbruZm59cwpCUwxLEek8FMzGEsDPS9ujQ2rN"
-  );
+  const program = await sdk.getNFTDrop(programAddress);
   const nfts = await program?.getAllClaimed();
 
   const hasNFT = nfts?.some((nft) => nft.owner === user.address);

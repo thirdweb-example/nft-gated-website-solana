@@ -8,13 +8,13 @@ import {
 } from "@thirdweb-dev/react/solana";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { programAddress } from "../const/yourDetails";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const { publicKey } = useWallet();
   const { user } = useUser();
   const login = useLogin();
-  const programAddress = "GZttphkwJbruZm59cwpCUwxLEek8FMzGEsDPS9ujQ2rN";
   const program = useProgram(programAddress, "nft-drop");
   const { mutate, isLoading } = useClaimNFT(program.data);
 
