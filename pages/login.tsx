@@ -13,10 +13,12 @@ import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const { publicKey } = useWallet();
-  const { user } = useUser();
+  const { user, isLoading: userLoading } = useUser();
   const login = useLogin();
   const program = useProgram(programAddress, "nft-drop");
   const { mutate, isLoading } = useClaimNFT(program.data);
+
+  if (userLoading) return <></>;
 
   return (
     <div className={styles.container}>
@@ -43,8 +45,8 @@ const Home: NextPage = () => {
         </button>
       )}
 
-      <Link href="/" passHref>
-        <a className={styles.lightPurple}>Protected Page</a>
+      <Link href="/" passHref className={styles.lightPurple}>
+        Protected Page
       </Link>
     </div>
   );
