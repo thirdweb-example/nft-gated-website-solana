@@ -13,7 +13,7 @@
     "@solana/wallet-adapter-react": "^0.15.20",
     "@solana/wallet-adapter-react-ui": "^0.9.18",
     "@solana/wallet-adapter-wallets": "^0.19.1",
-    "@thirdweb-dev/auth": "^2.0.29",
+    "@thirdweb-dev/auth": "^2",
     "@thirdweb-dev/react": "^3",
     "@thirdweb-dev/sdk": "^3",
     "next": "^13.0.3",
