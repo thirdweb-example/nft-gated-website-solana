@@ -43,8 +43,8 @@ const Home: NextPage = () => {
         </button>
       )}
 
-      <Link href="/" passHref>
-        <a className={styles.lightPurple}>Protected Page</a>
+      <Link href="/" passHref className={styles.lightPurple}>
+        Protected Page
       </Link>
     </div>
   );
